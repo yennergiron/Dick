@@ -131,5 +131,6 @@ for( i;i<contador;i++){
     archivo<<contador<<funcionalidad[i]<<endl;
 
 }
-archivo.close();	
+archivo.close();
+
 }
