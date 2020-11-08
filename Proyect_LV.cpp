@@ -1,136 +1,208 @@
-#include<iostream> 
+#include <iostream>
 #include<stdlib.h>
-#include<string.h>
 #include<fstream>
+#include<cstdlib>
+#include <windows.h>
 using namespace std;
-void aniadir();
-void escribir();
-void lectura();
-void modificar();
-void memoria();
-char res;
-int contador;
-int i;
-string *palabra,*traduccion,*funcionalidad;
-main(){
-int menu;
-do{palabra= new string[contador];
-traduccion=new string[contador];
-funcionalidad=new string[contador];
- cout<<"Buenas noches seleccione 1 opcion: "<<endl;
- cout<<"Palabras Guardadas #"<<contador<<endl;
-	cout<<"1.escribir"<<endl<<"2.modificar"<<endl<<"3.Leer"<<endl;
-	cin>>menu;
-	switch (menu){
-		case 1:contador++;
-			aniadir();
-			break;
-			case 2:
-				modificar();
-				cout<<"Esta modificando"<<endl;
-				 memoria();
-				 cout<<"Desea ingresar otro dato s/n: ";
-	cin>>res;
-				break;
-				case 3:
-					 lectura();
-					 break;
-
-	} }while(res=='s');
+int cotador=0;
+int menu(){
+	system("cls");
+	int x;
+	cout<<"***Ingrese los siguientes registros***"<<endl;
+	cout<<"**Elija una de las sigueintes opciones**"<<endl;
+	cout<<"1. Agregar"<<endl;
+	cout<<"2. Leer"<<endl;
+	cout<<"3. Buscar"<<endl;
+	cout<<"4. Modificar"<<endl;
+	cout<<"5. Eliminar"<<endl;
+	cout<<"6. Salir"<<endl;
+	cin>>x;
+	return x;
+}
+void agregar(ofstream&es){ int contador;
+	system("cls");
+	string palabra;
+	string traduccion;
+	string funcion;
+    contador++; 
+	es.open("proyecto.txt", ios::out | ios::app ); 
+    cin.ignore(); 	
+	cout<<"Palabra ";
+	getline(cin,palabra);
+	cout<<"Traduccion ";
+	getline(cin,traduccion);
+	cout<<"funcion ";
+	getline(cin,funcion);
+	es<<palabra<<endl<<traduccion<<endl<<funcion<<endl;
+	es.close();
+}
+void verRegistros(ifstream&Lec){
+	system("cls");
+	string palabra;
+	string traduccion;
+	string funcion;
+	Lec.open("proyecto.txt", ios::in);
+	if (Lec.is_open()){
+	cin.ignore();
+	getline(Lec,palabra);
+	while(!Lec.eof()){
+		getline(Lec,traduccion);
+		getline(Lec,funcion);
+		cout<<"Palabra........ "<<palabra<<endl;
+		cout<<"Traduccion:.... "<<traduccion<<endl;
+		cout<<"Funcion:....... "<<funcion<<endl;
+		cout<<"      "<<endl;
+		getline(Lec,palabra);
+	}
+	Lec.close();
+}else 
+cout<<"Error el archivo no existe"<<endl;
 	system("pause");
-	return 0; }
-void escribir(){
-ofstream archivo;
-archivo.open("proyecto1.txt",ios::out);
-if (archivo.fail()){
-	cout<<"No se puede abrir archivo";
-	exit(1);
-}		
-archivo<<"Inicio del programa"<<endl;
-archivo.close();
-		cout<<"Desea ingresar otro dato s/n: ";
-	cin>>res;	
-}
-void aniadir(){
-ofstream archivo;
-
-archivo.open("proyecto1.txt",ios::app);
-if (archivo.fail()){
-	cout<<"No se puede abrir archivo";
-	exit(1);
-}	
-int i; i=contador-1;
-palabra= new string[contador];
-traduccion=new string[contador];
-funcionalidad=new string[contador];
-for( int a=0 ;a==0;a++){
-cin.ignore();
-cout<<"Ingrese una palabra en ingles"<<endl;
-	getline(cin,palabra[i]);
-	archivo<<contador<<palabra[i]<<endl;
-cout<<"Ingrese traduccion al espanol"<<endl;
-    getline(cin,traduccion[i]);
-    archivo<<contador<<traduccion[i]<<endl;
-cout<<"Ingrese funcionalidad"<<endl;
-    getline(cin,funcionalidad[i]);
-    archivo<<contador<<funcionalidad[i]<<endl;
-} 
-		cout<<"Desea ingresar otro dato s/n: ";
-	cin>>res;
+	
 }
 
-void lectura(){
-	ifstream archivo;
-	string alabra;
-	archivo.open("proyecto1.txt",ios::in);
-
-	if(archivo.fail()){
-		cout<<"No se pudo abrir el archivo";
-		exit(1);
-	}
-while(!archivo.eof()){
-	getline(archivo,alabra);
-		cout<<alabra<<endl;
-	}
+void buscarPersona(ifstream &Lec){
+	system("cls");
+	Lec.open("proyecto.txt", ios::in);
+	string palabra,traduccion,funcion,buscador;
+	bool encontrado = false;
+	cout<<"Escriba la Palabra: ";
+	cin.ignore();
+	getline(cin,buscador);
+	
+	getline(Lec,palabra);
+	while(!Lec.eof() && !encontrado){
+	
+		getline(Lec,traduccion);
+		getline(Lec,funcion);
+		if(palabra==buscador){
+		cout<<"Palabra........ "<<palabra<<endl;
+		cout<<"Traduccion:.... "<<traduccion<<endl;
+		cout<<"Funcion:....... "<<funcion<<endl;
+		cout<<"      "<<endl;
+			encontrado = true;
+		}
 		
-	archivo.close();
-		cout<<"Desea ingresar otro dato s/n: ";
-	cin>>res;
+		getline(Lec,palabra);
+	}
+	Lec.close();
+	
+	if (!encontrado)
+	cout<<"Palabra no encontrada"<<endl;
+	system("pause");
 }
 
-void modificar(){	
-cout<<"Ingrese el numero de palabra que desea modificar"<<endl;
-cin>>i;
-cout<<"La palabra que desea modificar es: "<<palabra[i]<<endl;
-for( i;i<contador;i++){
-cin.ignore();
-cout<<"Ingrese una palabra en ingles"<<endl;
-	getline(cin,palabra[i]);
-cout<<"Ingrese traduccion al espanol"<<endl;
-    getline(cin,traduccion[i]);
-cout<<"Ingrese funcionalidad"<<endl;
-    getline(cin,funcionalidad[i]);
-}
-	cout<<"Desea ingresar otro dato s/n: ";
-	cin>>res;
+void modificar(ifstream &Lec){
+	system("cls");
+	string palabra;
+	string traduccion;
+	string funcion;
+	string buscador;
+	string mpalabra;
+	string mtraduccion;
+	string mfuncion;
+	Lec.open("proyecto.txt", ios::in);
+	ofstream aux("auxiliar.txt", ios::out);
+	if(Lec.is_open()){
+		cout<<"Palabra ";
+		cin.ignore();
+		getline(cin,buscador);
+		getline(Lec,palabra);
+		while(!Lec.eof()){
+		getline(Lec,traduccion);
+		getline(Lec,funcion);
+		if(palabra==buscador){
+		cout<<"Palabra........ "<<palabra<<endl;
+		cout<<"Traduccion:.... "<<traduccion<<endl;
+		cout<<"Funcion:....... "<<funcion<<endl;
+		cout<<"      "<<endl;
+			cout<<"Nombre Nuevo ";
 
+			getline(cin,mpalabra);
+			cout<<"Traduccion Nuevo ";
+			getline(cin,mtraduccion);
+			cout<<"Funcion Nuevo ";
+			getline(cin,mfuncion);
+			aux<<mpalabra<<endl<<mtraduccion<<endl<<mfuncion<<endl;
+		}else{
+			aux<<palabra<<endl<<traduccion<<endl<<funcion<<endl;
+		}
+		getline(Lec,palabra);
+		}
+		Lec.close();
+	    aux.close();
+	}else
+	cout<<"Error"<<endl;
+	remove("proyecto.txt");
+	rename("auxiliar.txt", "proyecto.txt");
+	
 }
-void memoria(){
-	ofstream archivo;
-archivo.open("proyecto1.txt",ios::out);
-if (archivo.fail()){
-	cout<<"No se puede abrir archivo";
-	exit(1);
-}		
-archivo<<"Inicio del programa"<<endl;
-contador++;
-int i=1;
-for( i;i<contador;i++){
-	archivo<<contador<<palabra[i]<<endl;
-    archivo<<contador<<traduccion[i]<<endl;
-    archivo<<contador<<funcionalidad[i]<<endl;
 
+void eliminar(ifstream &Lec){
+	system("cls");
+	string palabra;
+	string traduccion;
+	string funcion;
+	string buscador;
+	string mpalabra;
+	string mtraduccion;
+	string mfuncion;
+	Lec.open("proyecto.txt", ios::in);
+	ofstream aux("auxiliar.txt", ios::out);
+	if(Lec.is_open()){
+		cout<<"Palabra ";
+		cin.ignore();
+		getline(cin,buscador);
+		getline(Lec,palabra);
+		while(!Lec.eof()){
+		getline(Lec,traduccion);
+		getline(Lec,funcion);
+		if(palabra==buscador){
+			cout<<"Palabra Eliminada correctamente";
+			Sleep(1500);
+		}else{
+			aux<<palabra<<endl<<traduccion<<endl<<funcion<<endl;
+		}
+		getline(Lec,palabra);
+		}
+		Lec.close();
+	    aux.close();
+	}else
+	cout<<"Error"<<endl;
+	remove("proyecto.txt");
+	rename("auxiliar.txt", "proyecto.txt");
+	
+	
+	
 }
-archivo.close();
 
+
+
+int main(){
+	ofstream Esc;
+	ifstream Lec;
+	int op;
+	do{
+		system("cls");
+		op = menu();
+		switch(op){
+			case 1:
+				agregar(Esc);
+				break;	
+			case 2:
+			verRegistros(Lec);	
+				break;
+			case 3:
+			buscarPersona(Lec);
+			    break;
+			case 4:
+			    modificar(Lec);
+				break;
+			case 5:
+				eliminar(Lec);
+				break;
+					}
+		
+	}while(op != 6);
+	return 0;
 }

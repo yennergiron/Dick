@@ -22,3 +22,9 @@
 8class
 8clase
 8Sirve para definir una clase y para declarar objetos de esa clase. Su uso es parecido a la ya conocida struct
+1
+1
+1
+1horario
+1schedule
+1muestra hora
